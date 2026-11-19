@@ -1,0 +1,37 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "uppercut-beat-grid"
+version = "0.1.0"
+description = "Detect beats, downbeats and tempo into a JSON beat grid, align cut times to it, and render a beat-synced music bed."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [{ name = "Uppercut Labs", email = "packages@uppercut-labs.com" }]
+dependencies = ["numpy>=1.24"]
+keywords = ["beat", "tempo", "downbeat", "beat-grid", "video-editing", "music"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3",
+  "Topic :: Multimedia :: Sound/Audio :: Analysis",
+  "Typing :: Typed",
+]
+
+[project.optional-dependencies]
+audio = ["soundfile>=0.12"]
+librosa = ["librosa>=0.10"]
+
+[project.urls]
+Source = "https://github.com/uppercut-labs/py-kit/tree/main/packages/uppercut-beat-grid"
+
+[project.scripts]
+uppercut-beat-grid = "uppercut_beat_grid.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/uppercut_beat_grid"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src", "tests", "README.md"]
