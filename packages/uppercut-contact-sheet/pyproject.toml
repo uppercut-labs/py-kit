@@ -1,0 +1,31 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "uppercut-contact-sheet"
+version = "0.1.0"
+description = "Build labelled contact-sheet grids from images and video frames with Pillow."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [{ name = "Uppercut Labs", email = "packages@uppercut-labs.com" }]
+dependencies = ["Pillow>=10"]
+keywords = ["contact sheet", "thumbnails", "pillow", "video frames"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Topic :: Multimedia :: Graphics",
+  "Typing :: Typed",
+]
+
+[project.urls]
+Source = "https://github.com/uppercut-labs/py-kit/tree/main/packages/uppercut-contact-sheet"
+
+[project.scripts]
+uppercut-contact-sheet = "uppercut_contact_sheet.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/uppercut_contact_sheet"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src", "tests", "README.md"]

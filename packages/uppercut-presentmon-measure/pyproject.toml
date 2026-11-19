@@ -1,0 +1,32 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "uppercut-presentmon-measure"
+version = "0.1.0"
+description = "Run startup, idle and workload scenarios against a desktop app, record frame timing with Intel PresentMon and summarize it to JSON."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [{ name = "Uppercut Labs", email = "packages@uppercut-labs.com" }]
+keywords = ["presentmon", "frame-time", "performance", "benchmark", "desktop"]
+dependencies = []
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Operating System :: OS Independent",
+  "Topic :: Software Development :: Testing",
+  "Typing :: Typed",
+]
+
+[project.urls]
+Source = "https://github.com/uppercut-labs/py-kit/tree/main/packages/uppercut-presentmon-measure"
+
+[project.scripts]
+uppercut-presentmon-measure = "uppercut_presentmon_measure.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/uppercut_presentmon_measure"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src", "tests", "README.md"]
