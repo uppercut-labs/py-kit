@@ -11,7 +11,7 @@ package = false
 members = ["packages/*"]
 
 [dependency-groups]
-dev = ["pytest==8.4.2", "build==1.3.0", "twine==6.2.0"]
+dev = ["pytest==8.4.2"]
 
 [tool.pytest.ini_options]
 testpaths = ["packages"]
