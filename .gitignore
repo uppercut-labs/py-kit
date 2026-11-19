@@ -6,3 +6,5 @@ build/
 .pytest_cache/
 .DS_Store
 uv.lock
+.env*
+*.pem
