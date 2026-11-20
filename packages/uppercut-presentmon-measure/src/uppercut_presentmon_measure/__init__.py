@@ -9,7 +9,7 @@ from .parse import (
     summarize_runs,
     summarize_startup_marks,
 )
-from .runner import build_presentmon_command, resolve_presentmon, run_scenario
+from .runner import build_presentmon_command, find_capture_csv, resolve_presentmon, run_scenario
 
 __all__ = [
     "Config",
@@ -17,6 +17,7 @@ __all__ = [
     "FrameParseError",
     "Scenario",
     "build_presentmon_command",
+    "find_capture_csv",
     "load_config",
     "parse_config",
     "parse_marks",

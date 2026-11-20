@@ -126,10 +126,26 @@ def _run_startup(scenario: Scenario) -> dict:
     }
 
 
+def find_capture_csv(requested: str | Path, since: float = 0.0) -> Path | None:
+    """Find the CSV a capture wrote. Intel's PresentMon service CLI appends
+    ``-<process>[<pid>]-<timestamp>`` to the requested name, so ``out.csv`` arrives as
+    ``out-app.exe[1234]-260101T120000.csv``. Returns the exact file if it exists, else the
+    newest suffixed file modified at or after ``since`` (seconds since the epoch)."""
+    requested = Path(requested)
+    if requested.exists():
+        return requested
+    matches = [
+        path for path in requested.parent.glob(f"{requested.stem}-*{requested.suffix}")
+        if path.stat().st_mtime >= since
+    ]
+    return max(matches, key=lambda path: path.stat().st_mtime) if matches else None
+
+
 def _run_capture(scenario: Scenario, presentmon: "str | Sequence[str]", out_dir: Path, extra_args: Sequence[str]) -> dict:
     csv_path = out_dir / f"{scenario.name}.csv"
     if csv_path.exists():
         csv_path.unlink()
+    capture_started = time.time() - 1.0
     if scenario.marks_file and Path(scenario.marks_file).exists():
         Path(scenario.marks_file).unlink()
     proc, started = _launch(scenario)
@@ -158,9 +174,10 @@ def _run_capture(scenario: Scenario, presentmon: "str | Sequence[str]", out_dir:
             _stop(capture)
     finally:
         _stop(proc)
-    result["csv"] = str(csv_path)
+    written = find_capture_csv(csv_path, capture_started)
+    result["csv"] = str(written or csv_path)
     try:
-        frames = parse_presentmon_csv(csv_path.read_text(encoding="utf-8")) if csv_path.exists() else []
+        frames = parse_presentmon_csv(written.read_text(encoding="utf-8")) if written else []
         result["frames"] = summarize_frames(frames, scenario.refresh_hz)
         if not frames:
             result["note"] = "the capture recorded no frames"

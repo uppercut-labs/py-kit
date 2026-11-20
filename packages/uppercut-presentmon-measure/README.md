@@ -52,7 +52,7 @@ Python 3.10 or newer, no runtime dependencies. You supply PresentMon (the consol
 uppercut-presentmon-measure run --config measure.json
 ```
 
-The summary is printed and written to `out/result.json`; each capture's raw CSV is kept as `out/<name>.csv`. A single scenario can also come from arguments:
+The summary is printed and written to `out/result.json`; each capture's raw CSV is kept as `out/<name>.csv`. Intel's PresentMon service CLI appends the process and a timestamp to the name it is given (`out/<name>-app.exe[1234]-<time>.csv`); the runner finds that file and reports its path in `csv`. A single scenario can also come from arguments:
 
 ```
 uppercut-presentmon-measure run --kind idle --capture 15 --presentmon PresentMonCli.exe -- my-app.exe
@@ -115,6 +115,7 @@ Top-level config keys: `scenarios`, `presentmon`, `out_dir` (default `out`), and
 | Error | Raised when |
 | --- | --- |
 | `ConfigError` | The config is missing a field or a value has the wrong type. |
+| `find_capture_csv(requested, since=0.0) -> Path or None` | The CSV a capture wrote: the exact name, or the newest suffixed one written since `since`. |
 | `FrameParseError` | A CSV has no frame-time column or a non-numeric value. |
 | `FileNotFoundError` | The PresentMon executable cannot be found. |
 | `RuntimeError` | A scenario is run off Windows, or the app exits before the capture starts. |

@@ -120,6 +120,44 @@ def test_idle_and_workload_scenarios_with_stand_in_tools(tools, tmp_path):
     assert (tmp_path / "out" / "scroll.csv").exists()
 
 
+SUFFIXING_PRESENTMON = textwrap.dedent(
+    """
+    import sys
+    from pathlib import Path
+    args = sys.argv[1:]
+    out = Path(args[args.index("--output_file") + 1])
+    named = out.with_name(out.stem + "-app.exe[4242]-261119T210000" + out.suffix)
+    named.write_text("Application,FrameTime,Dropped\\n" + "".join("app.exe,8.3,0\\n" for _ in range(6)))
+    """
+)
+
+
+def test_capture_finds_the_suffixed_csv_the_intel_cli_writes(tools, tmp_path):
+    app, _, marks = tools
+    pm = tmp_path / "suffixing_presentmon.py"
+    pm.write_text(SUFFIXING_PRESENTMON)
+    scenario = Scenario(
+        name="idle", kind="idle", command=[sys.executable, str(app), str(marks)],
+        warmup_seconds=0.3, capture_seconds=1, refresh_hz=120,
+    )
+    result = run_scenario(scenario, [sys.executable, str(pm)], tmp_path / "out", allow_any_platform=True)
+    assert result["frames"]["frames"] == 6
+    assert result["csv"].endswith("idle-app.exe[4242]-261119T210000.csv")
+
+
+def test_find_capture_csv_ignores_older_files(tmp_path):
+    from uppercut_presentmon_measure import find_capture_csv
+    old = tmp_path / "run-a.exe[1]-1.csv"
+    old.write_text("x")
+    import os
+    os.utime(old, (1000, 1000))
+    assert find_capture_csv(tmp_path / "run.csv", since=2000) is None
+    assert find_capture_csv(tmp_path / "run.csv") == old
+    exact = tmp_path / "run.csv"
+    exact.write_text("y")
+    assert find_capture_csv(exact, since=2000) == exact
+
+
 def test_capture_without_a_csv_reports_empty_capture(tools, tmp_path):
     app, _, marks = tools
     silent = [sys.executable, "-c", "pass"]
