@@ -1,4 +1,5 @@
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -269,3 +270,28 @@ def test_font_is_loaded_once_per_file_size_and_index(monkeypatch):
     assert font("a.ttf", 30, index=1) is not a
     assert calls == [("a.ttf", 30, 0), ("a.ttf", 31, 0), ("a.ttf", 30, 1)]
     font.cache_clear()
+
+
+def test_popen_kwargs_reach_popen(tmp_path):
+    ff = fake_ffmpeg(
+        tmp_path,
+        "sys.stdin.buffer.read()\n"
+        "open(sys.argv[-1], 'w').write(os.getcwd() + '|' + os.environ.get('RV_TEST', ''))\n",
+    )
+    work = tmp_path / "work"
+    work.mkdir()
+    out = tmp_path / "seen.txt"
+    with RawVideoEncoder(
+        out, SIZE, 60, crf=16, preset="medium", ffmpeg=ff,
+        popen_kwargs={"cwd": work, "env": {**os.environ, "RV_TEST": "yes"}},
+    ) as enc:
+        enc.write(solid(1))
+    cwd, flag = out.read_text().split("|")
+    assert os.path.samefile(cwd, work)
+    assert flag == "yes"
+
+
+def test_popen_kwargs_cannot_take_the_pipes(tmp_path):
+    for key in ("stdin", "stdout", "stderr"):
+        with pytest.raises(ValueError, match=key):
+            RawVideoEncoder(tmp_path / "o.mp4", SIZE, 60, crf=16, preset="medium", popen_kwargs={key: None})

@@ -6,7 +6,7 @@ import subprocess
 import tempfile
 from fractions import Fraction
 from pathlib import Path
-from typing import IO, Any, Sequence, Union
+from typing import IO, Any, Mapping, Sequence, Union
 
 from PIL import Image
 
@@ -104,6 +104,9 @@ class RawVideoEncoder:
         output_args: More ffmpeg output arguments, placed after the x264 settings and before the file name, such as
             `["-threads", "6", "-movflags", "+faststart"]`.
         ffmpeg: The ffmpeg executable, or a command prefix as a list.
+        popen_kwargs: Extra keyword arguments for `subprocess.Popen`, such as `cwd`, `env` or Windows `creationflags`
+            (to lower ffmpeg's priority or hide its window). `stdin`, `stdout` and `stderr` belong to the encoder and
+            raise `ValueError`.
         tail_bytes: How much of ffmpeg's error output an `EncodeError` carries.
     """
 
@@ -119,7 +122,12 @@ class RawVideoEncoder:
         output_args: Sequence[str] = (),
         ffmpeg: FfmpegCommand = "ffmpeg",
         tail_bytes: int = 4096,
+        popen_kwargs: Mapping[str, Any] | None = None,
     ):
+        extra = dict(popen_kwargs or {})
+        reserved = sorted(set(extra) & {"stdin", "stdout", "stderr"})
+        if reserved:
+            raise ValueError(f"popen_kwargs cannot set {', '.join(reserved)}: the encoder owns the pipes")
         self.path = Path(path)
         self.size = (int(size[0]), int(size[1]))
         self.frames = 0
@@ -133,7 +141,7 @@ class RawVideoEncoder:
         self._stderr: IO[bytes] = tempfile.TemporaryFile()
         try:
             self._proc = subprocess.Popen(
-                self.command, stdin=subprocess.PIPE, stdout=subprocess.DEVNULL, stderr=self._stderr,
+                self.command, stdin=subprocess.PIPE, stdout=subprocess.DEVNULL, stderr=self._stderr, **extra,
             )
         except OSError as exc:
             self._stderr.close()
