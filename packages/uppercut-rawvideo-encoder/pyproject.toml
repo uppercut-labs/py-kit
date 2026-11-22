@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "uppercut-rawvideo-encoder"
-version = "0.1.0"
+version = "0.1.1"
 description = "Pipe RGB frames from Pillow renders to ffmpeg as H.264, and check that ffmpeg succeeded."
 readme = "README.md"
 requires-python = ">=3.10"

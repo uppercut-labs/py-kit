@@ -34,7 +34,7 @@ Leaving the `with` block normally finishes the file and raises `EncodeError` if 
 
 ## RawVideoEncoder
 
-`RawVideoEncoder(path, size, fps, *, crf, preset, extra_inputs=(), output_args=(), ffmpeg="ffmpeg", tail_bytes=4096)`
+`RawVideoEncoder(path, size, fps, *, crf, preset, extra_inputs=(), output_args=(), ffmpeg="ffmpeg", tail_bytes=4096, popen_kwargs=None)`
 
 | Argument | Meaning |
 | --- | --- |
@@ -46,6 +46,7 @@ Leaving the `with` block normally finishes the file and raises `EncodeError` if 
 | `output_args` | More ffmpeg output arguments, placed after the x264 settings and before the file name. |
 | `ffmpeg` | The executable, or a command prefix as a list. |
 | `tail_bytes` | How much of ffmpeg's error output goes into `EncodeError`. |
+| `popen_kwargs` | Extra keyword arguments for `subprocess.Popen`: `cwd`, `env`, or Windows `creationflags` to run ffmpeg at below-normal priority or without a console window. `stdin`, `stdout` and `stderr` are reserved and raise `ValueError`. |
 
 | Member | What it does |
 | --- | --- |
