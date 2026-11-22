@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Sequence
 
 from .config import ConfigError, Scenario, load_config, parse_scenario
-from .parse import FrameParseError, parse_presentmon_csv, summarize_frames
+from .parse import FrameParseError, parse_presentmon_csv, summarize_displayed, summarize_frames
 from .runner import resolve_presentmon, run_scenario
 
 
@@ -29,7 +29,9 @@ def _build_parser() -> argparse.ArgumentParser:
     run.add_argument("--capture", type=float, help="seconds of capture")
     run.add_argument("--marks-file", help="file the app writes its startup marks to")
     run.add_argument("--capture-process-name", help="capture this process name instead of the launched pid")
-    run.add_argument("--refresh-hz", type=float, help="display refresh rate, adds missedRefreshFrames")
+    run.add_argument("--capture-child-match", help="capture the app's child process whose command line contains this text; write it with an equals sign, for example --capture-child-match=--type=gpu-process")
+    run.add_argument("--capture-delay", type=float, help="seconds between the workload start (idle: the end of the warmup) and the capture start")
+    run.add_argument("--refresh-hz", type=float, help="display refresh rate, adds missedRefreshFrames and the displayed-frame summary")
     run.add_argument("--workload-command", help="workload command line (split on spaces)")
     run.add_argument("app", nargs="*", help="app command after --, for a single scenario")
 
@@ -45,6 +47,7 @@ def _scenario_from_args(args: argparse.Namespace) -> Scenario:
         ("name", args.name), ("cwd", args.cwd), ("runs", args.runs),
         ("warmup_seconds", args.warmup), ("capture_seconds", args.capture),
         ("marks_file", args.marks_file), ("capture_process_name", args.capture_process_name),
+        ("capture_child_match", args.capture_child_match), ("capture_delay_seconds", args.capture_delay),
         ("refresh_hz", args.refresh_hz),
     ):
         if value is not None:
@@ -89,7 +92,10 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         if args.action == "summarize":
             frames = parse_presentmon_csv(args.csv.read_text(encoding="utf-8"))
-            print(json.dumps(summarize_frames(frames, args.refresh_hz), indent=2))
+            summary = summarize_frames(frames, args.refresh_hz)
+            if args.refresh_hz and any(f["display_ms"] is not None for f in frames):
+                summary["displayed"] = summarize_displayed(frames, args.refresh_hz)
+            print(json.dumps(summary, indent=2))
             return 0
         return _run(args)
     except (ConfigError, FrameParseError, FileNotFoundError, RuntimeError, OSError) as error:

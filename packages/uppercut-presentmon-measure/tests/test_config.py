@@ -79,3 +79,21 @@ def test_load_config_bad_json(tmp_path):
     path.write_text("{nope")
     with pytest.raises(ConfigError, match="not valid JSON"):
         load_config(path)
+
+
+def test_capture_target_options():
+    scenario = parse_config(base(capture_child_match="--type=gpu-process", capture_delay_seconds=2)).scenarios[0]
+    assert scenario.capture_child_match == "--type=gpu-process"
+    assert scenario.capture_delay_seconds == 2.0
+    default = parse_config(base()).scenarios[0]
+    assert default.capture_child_match is None
+    assert default.capture_delay_seconds == 0.0
+
+
+def test_capture_target_option_errors():
+    with pytest.raises(ConfigError, match="not both"):
+        parse_config(base(capture_child_match="x", capture_process_name="a.exe"))
+    with pytest.raises(ConfigError, match="capture_child_match"):
+        parse_config(base(capture_child_match=""))
+    with pytest.raises(ConfigError, match="capture_delay_seconds"):
+        parse_config(base(capture_delay_seconds=-1))
