@@ -19,7 +19,9 @@ class Scenario:
 
     ``startup`` launches the app ``runs`` times and reads marks; ``idle`` launches once and captures
     frames while nothing happens; ``workload`` does the same and also runs ``workload_command``
-    when the capture starts.
+    when the capture starts, or ``capture_delay_seconds`` after the workload starts.
+    ``capture_child_match`` captures the launched app's child process whose command line contains
+    that text, instead of the launched process itself.
     """
 
     name: str
@@ -34,6 +36,8 @@ class Scenario:
     marks_file: str | None = None
     marks_timeout_seconds: float = 30.0
     capture_process_name: str | None = None
+    capture_child_match: str | None = None
+    capture_delay_seconds: float = 0.0
     refresh_hz: float | None = None
 
 
@@ -83,6 +87,11 @@ def parse_scenario(data: Mapping, index: int = 0) -> Scenario:
     marks_file = data.get("marks_file")
     if kind == "startup" and not marks_file:
         raise ConfigError(f"{where}.marks_file is required for a startup scenario")
+    child_match = data.get("capture_child_match")
+    if child_match is not None and (not isinstance(child_match, str) or not child_match):
+        raise ConfigError(f"{where}.capture_child_match must be a non-empty string")
+    if child_match is not None and data.get("capture_process_name") is not None:
+        raise ConfigError(f"{where}: give capture_child_match or capture_process_name, not both")
     hz = data.get("refresh_hz")
     if hz is not None and (isinstance(hz, bool) or not isinstance(hz, (int, float)) or hz <= 0):
         raise ConfigError(f"{where}.refresh_hz must be a positive number")
@@ -99,6 +108,8 @@ def parse_scenario(data: Mapping, index: int = 0) -> Scenario:
         marks_file=marks_file,
         marks_timeout_seconds=_number(data, "marks_timeout_seconds", 30.0, where, minimum=0.1),
         capture_process_name=data.get("capture_process_name"),
+        capture_child_match=child_match,
+        capture_delay_seconds=_number(data, "capture_delay_seconds", 0.0, where),
         refresh_hz=float(hz) if hz is not None else None,
     )
 

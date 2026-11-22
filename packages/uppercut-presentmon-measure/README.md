@@ -1,6 +1,6 @@
 # uppercut-presentmon-measure
 
-Runs startup, idle and workload scenarios against a desktop app on Windows, records frame timing with Intel PresentMon, and writes a JSON summary: frame-time percentiles, average fps, dropped frames, frames that missed the display refresh, and startup marks the app reports. Parsing a PresentMon CSV and summarizing it are plain functions that work on any platform. Launching an app and capturing needs Windows and a PresentMon executable.
+Runs startup, idle and workload scenarios against a desktop app on Windows, records frame timing with Intel PresentMon, and writes a JSON summary: frame-time percentiles, average fps, dropped frames, frames that missed the display refresh, the cadence at which frames reached the display, and startup marks the app reports. Parsing a PresentMon CSV and summarizing it are plain functions that work on any platform. Launching an app and capturing needs Windows and a PresentMon executable.
 
 ## Install
 
@@ -74,7 +74,23 @@ uppercut-presentmon-measure summarize frames.csv --refresh-hz 60
 
 The marks file is JSON with epoch milliseconds, either `{"marks": {"ready": 1700000000123}}` or the flat form `{"ready": 1700000000123}`. Scenarios other than `startup` also report marks when `marks_file` is set.
 
-A capture targets the launched process. Apps that present from a child process (Chromium and Electron present from their GPU process) can be captured with `capture_process_name` instead. PresentMon records nothing while a window is idle and not presenting, so an idle capture can legitimately come back with `"frames": 0` and a `note`.
+A capture targets the launched process. Apps that present from a child process (Chromium and Electron present from their GPU process) can be captured with `capture_process_name`, or with `capture_child_match`, which finds the launched app's child whose command line contains a text (`--type=gpu-process`) when the capture starts and captures that pid. PresentMon records nothing while a window is idle and not presenting, so an idle capture can legitimately come back with `"frames": 0` and a `note`.
+
+## Frames as the display showed them
+
+`FrameTime` and `msBetweenPresents` say when frames were presented. PresentMon's `msBetweenDisplayChange` says when each one reached the display, which is what a viewer sees: a frame the compositor dropped or merged has an interval of 0 or `NA`. `parse_presentmon_csv` reads that column (and `TimeInSeconds`) into each frame as `display_ms` and `time_s`, and `summarize_displayed(frames, refresh_hz)` summarizes it:
+
+```python
+from uppercut_presentmon_measure import parse_presentmon_csv, summarize_displayed
+
+frames = parse_presentmon_csv(open("frames.csv", encoding="utf-8").read())
+summarize_displayed(frames, 120)
+# {"presents": 412, "displayed": 409, "refreshHz": 120, "periodMs": 8.333,
+#  "displayIntervalMs": {"min": ..., "mean": ..., "p50": 8.31, "p90": ..., "p95": ..., "p99": 8.5, "max": 17.1},
+#  "lateFrames": 1, "latePct": 0.24, "durationSeconds": 3.41, "displayedFps": 119.9}
+```
+
+A frame is late when its display interval is more than 1.5 display periods. Percentiles are interpolated by default; pass `percentile_method="index"` for a plain `sorted(values)[int(p / 100 * n)]` index, the way many hand-written scripts compute them. A scenario with `refresh_hz` adds the same summary as `displayed`, and `summarize --refresh-hz` prints it too.
 
 ## Scenario options
 
@@ -91,7 +107,9 @@ A capture targets the launched process. Apps that present from a child process (
 | `marks_file` | none | Required for `startup`. |
 | `marks_timeout_seconds` | 30 | How long `startup` waits for marks. |
 | `capture_process_name` | launched pid | Capture a process by name. |
-| `refresh_hz` | none | Adds `missedRefreshFrames`: frames longer than 1.5 refresh intervals. |
+| `capture_child_match` | launched pid | Capture the app's descendant process whose command line contains this text, found when the capture starts (waits up to 10 s for it). Not combinable with `capture_process_name`. The pid is reported as `capturedPid`. |
+| `capture_delay_seconds` | 0 | Seconds between the start of the workload (for `idle`, the end of the warmup) and the start of the capture. With 0 the capture starts first, then the workload. Above 0 the workload starts first and runs alongside the wait. |
+| `refresh_hz` | none | Adds `missedRefreshFrames` (frames longer than 1.5 refresh intervals) and, when the CSV has a display-change column, the `displayed` summary below. |
 
 Top-level config keys: `scenarios`, `presentmon`, `out_dir` (default `out`), and `presentmon_args` (extra arguments appended to every capture command).
 
@@ -99,15 +117,20 @@ Top-level config keys: `scenarios`, `presentmon`, `out_dir` (default `out`), and
 
 | Function | Description |
 | --- | --- |
-| `parse_presentmon_csv(text, frame_time_column=None) -> list[dict]` | Frames as `{"frame_time_ms", "dropped"}`. Reads `FrameTime` or `msBetweenPresents`. |
+| `parse_presentmon_csv(text, frame_time_column=None) -> list[dict]` | Frames as `{"frame_time_ms", "dropped", "display_ms", "time_s"}`. Reads `FrameTime` or `msBetweenPresents`; `display_ms` is `msBetweenDisplayChange` and `time_s` is `TimeInSeconds`, `None` when missing. |
+| `summarize_displayed(frames, refresh_hz, percentile_method="linear") -> dict` | Display-change cadence: displayed frames, interval percentiles, late frames, displayed fps. |
 | `summarize_frames(frames, refresh_hz=None) -> dict` | Frame count, duration, average fps, `frameTimeMs` min, mean, p50, p90, p95, p99 and max, dropped frames and percent. |
-| `percentile(values, pct) -> float` | Linear-interpolated percentile. |
+| `percentile(values, pct, method="linear") -> float` | Linear-interpolated percentile, or `method="index"` for a plain index. |
 | `summarize_runs(values_ms) -> dict` | Min, median and max of repeated runs; `None` counts as a failed run. |
 | `summarize_startup_marks(marks, launch_epoch_ms) -> dict` | Marks as milliseconds since launch. |
 | `parse_marks(text) -> dict` | Reads a marks file. |
 | `load_config(path)`, `parse_config(data)` | Validate a config into `Config` and `Scenario` objects. |
 | `build_presentmon_command(executable, output_file, seconds, pid=None, process_name=None, extra_args=())` | The capture command line. |
 | `resolve_presentmon(option=None, env=None) -> str` | Locate the executable. |
+| `find_capture_csv(requested, since=0.0) -> Path or None` | The CSV a capture wrote: the exact name, or the newest suffixed one written since `since`. |
+| `capture_frames(presentmon, out_csv, seconds, pid=None, process_name=None, delay_seconds=0, extra_args=(), refresh_hz=None) -> dict` | One capture of a chosen pid or process name, after an optional delay: waits, captures, finds the CSV and returns `frames`, `displayed`, `csv` and `presentmonExitCode`. For scripts that own their own timeline. |
+| `find_descendant_pid(root_pid, command_line_contains, processes=None, timeout_seconds=0) -> int or None` | The lowest pid among the descendants of `root_pid` whose command line contains the text. |
+| `list_processes() -> list[(pid, parent_pid, command_line)]` | Running processes; PowerShell on Windows, `ps` elsewhere. |
 | `run_scenario(scenario, presentmon, out_dir, extra_args=()) -> dict` | Run one scenario. Windows only. |
 
 ## Errors
@@ -115,12 +138,22 @@ Top-level config keys: `scenarios`, `presentmon`, `out_dir` (default `out`), and
 | Error | Raised when |
 | --- | --- |
 | `ConfigError` | The config is missing a field or a value has the wrong type. |
-| `find_capture_csv(requested, since=0.0) -> Path or None` | The CSV a capture wrote: the exact name, or the newest suffixed one written since `since`. |
 | `FrameParseError` | A CSV has no frame-time column or a non-numeric value. |
 | `FileNotFoundError` | The PresentMon executable cannot be found. |
 | `RuntimeError` | A scenario is run off Windows, or the app exits before the capture starts. |
 
 The command line exits with status 2 and prints the message for each of these.
+
+A scenario also raises `RuntimeError` when `capture_child_match` finds no child process, or when the app exits during `capture_delay_seconds`.
+
+On the command line, write the match with an equals sign so the shell does not read it as an option: `--capture-child-match=--type=gpu-process`. `--capture-delay` takes seconds.
+
+## Changes in 0.2.0
+
+- Reads `msBetweenDisplayChange` and `TimeInSeconds`; new `summarize_displayed`, and a `displayed` summary in scenario results and in `summarize` when a refresh rate is given.
+- New scenario options `capture_delay_seconds` and `capture_child_match`, and the matching `--capture-delay` and `--capture-child-match` flags.
+- New `capture_frames`, `find_descendant_pid` and `list_processes`; scenario results report `capturedPid`.
+- `percentile` takes `method`. Parsed frames carry two more keys (`display_ms`, `time_s`).
 
 ## License
 
