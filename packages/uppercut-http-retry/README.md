@@ -54,10 +54,11 @@ result = poll(fetch, lambda r: r.json().get("status") in {"succeeded", "failed"}
 | Name | What it does |
 | --- | --- |
 | `RetryPolicy(max_attempts=4, statuses={429, 500, 502, 503, 504}, base_delay=1.0, factor=2.0, max_delay=30.0, min_delay=0.0, default_retry_after=None, jitter=0.0)` | When to retry and how long to wait. `policy.delay(retry, retry_after=None)` gives the wait before a retry, counting from 0 |
-| `retry_call(send, policy=None, *, sleep=time.sleep, on_retry=None, retry_exceptions=(), retry_if=None)` | Call `send()` until it returns something that is not worth retrying. Returns the last response, or raises the last exception, when the tries run out |
-| `poll(fetch, done, *, interval=5.0, max_polls=60, sleep=time.sleep)` | Call `fetch()` until `done(value)` is true. Raises `PollTimeout` |
+| `retry_call(send, policy=None, *, sleep=None, on_retry=None, retry_exceptions=(), retry_if=None)` | Call `send()` until it returns something that is not worth retrying. Returns the last response, or raises the last exception, when the tries run out |
+| `poll(fetch, done, *, interval=5.0, max_polls=60, sleep=None)` | Call `fetch()` until `done(value)` is true. Raises `PollTimeout` |
 | `parse_retry_after(value)` | Seconds from a `Retry-After` value: a number or an HTTP date. `None` when missing, negative or unreadable |
 | `status_of(outcome)` | The HTTP status of a response or `HTTPError` (`status_code`, `status` or `code`), else `None` |
+| `sleep` (both functions) | `None` means `time.sleep`, looked up on each call. Pass your own to test without waiting |
 | `RetryInfo(attempt, status, delay, outcome)` | What `on_retry` receives before each wait, for logging or a metric |
 
 ## How waits are chosen

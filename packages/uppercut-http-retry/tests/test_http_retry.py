@@ -243,6 +243,16 @@ def test_header_lookup_ignores_case_and_accepts_mappings_message_and_none():
     assert sleep.sleeps == [9.0, 1.0, 6.0]
 
 
+def test_sleep_defaults_to_time_sleep_looked_up_at_call_time(monkeypatch):
+    import time
+
+    seen = []
+    monkeypatch.setattr(time, "sleep", seen.append)
+    retry_call(scripted(response(503), response(200)))
+    poll(scripted(1, 2).__call__, lambda v: v == 2, interval=3)
+    assert seen == [1, 3]
+
+
 # --- poll ------------------------------------------------------------------------------------------------
 
 

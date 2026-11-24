@@ -137,7 +137,7 @@ def retry_call(
     send: Callable[[], T],
     policy: Optional[RetryPolicy] = None,
     *,
-    sleep: Callable[[float], None] = time.sleep,
+    sleep: Optional[Callable[[float], None]] = None,
     on_retry: Optional[Callable[[RetryInfo], None]] = None,
     retry_exceptions: Tuple[type, ...] = (),
     retry_if: Optional[Callable[[Any], Optional[bool]]] = None,
@@ -154,6 +154,7 @@ def retry_call(
     and the last exception is raised.
     """
     policy = policy or RetryPolicy()
+    sleep = sleep or time.sleep  # looked up now, so a test can patch time.sleep
     attempt = 0
     while True:
         attempt += 1
@@ -196,7 +197,7 @@ def poll(
     *,
     interval: float = 5.0,
     max_polls: int = 60,
-    sleep: Callable[[float], None] = time.sleep,
+    sleep: Optional[Callable[[float], None]] = None,
 ) -> T:
     """Call `fetch()` until `done(value)` is true and return that value.
 
@@ -206,6 +207,7 @@ def poll(
     """
     if max_polls < 1:
         raise ValueError("max_polls must be at least 1")
+    sleep = sleep or time.sleep
     value: Any = None
     for count in range(1, max_polls + 1):
         value = fetch()
