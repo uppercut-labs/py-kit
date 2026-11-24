@@ -7,6 +7,7 @@ Small, focused Python packages from Uppercut Labs, each published on its own on 
 | [`uppercut-beat-grid`](packages/uppercut-beat-grid) | Detect beats, downbeats and tempo into a JSON beat grid, align cut times to it, and render a beat-synced music bed |
 | [`uppercut-contact-sheet`](packages/uppercut-contact-sheet) | Build labelled contact-sheet grids from images and video frames with Pillow |
 | [`uppercut-ffmpeg-loudness`](packages/uppercut-ffmpeg-loudness) | Measure integrated loudness and true peak with ffmpeg, then apply gain or normalize to a target |
+| [`uppercut-http-retry`](packages/uppercut-http-retry) | Retry HTTP calls on 429 and 5xx with exponential backoff and Retry-After, and poll an asynchronous operation until it finishes; works with urllib, requests and httpx |
 | [`uppercut-pixel-art-sheets`](packages/uppercut-pixel-art-sheets) | Pillow helpers for indexed pixel-art sheets: palettes, pattern fills, a bitmap font and sheet packing |
 | [`uppercut-presentmon-measure`](packages/uppercut-presentmon-measure) | Run startup, idle and workload scenarios against a desktop app, record frame timing with Intel PresentMon and summarize it to JSON |
 | [`uppercut-rawvideo-encoder`](packages/uppercut-rawvideo-encoder) | Pipe RGB frames from Pillow renders to ffmpeg as H.264, check ffmpeg's exit code, plus a nearest-neighbour upscale and a cached font loader |
