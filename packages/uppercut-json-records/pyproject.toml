@@ -1,0 +1,39 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "uppercut-json-records"
+version = "0.1.0"
+description = "Canonical JSON and hashes, stable prefixed IDs, JSON and JSONL batch loading with clear errors, and JSON Schema validator loading."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [{ name = "Uppercut Labs", email = "packages@uppercut-labs.com" }]
+keywords = ["json", "jsonl", "canonical-json", "hash", "json-schema", "records", "stable-id"]
+dependencies = []
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Operating System :: MacOS",
+  "Operating System :: Microsoft :: Windows",
+  "Operating System :: POSIX",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Typing :: Typed",
+]
+
+[project.optional-dependencies]
+schema = ["jsonschema>=4.18,<5"]
+
+[project.urls]
+Source = "https://github.com/uppercut-labs/py-kit/tree/main/packages/uppercut-json-records"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/uppercut_json_records"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src", "tests", "README.md"]
