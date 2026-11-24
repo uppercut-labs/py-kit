@@ -36,7 +36,7 @@ redact_mapping(event, extra_keys=("subject",), mode="drop")
 
 - `Authorization: Bearer <value>`, `Authorization=<value>`, `"Authorization": "Basic <value>"` (the scheme stays), also `Proxy-Authorization`.
 - A bare `Bearer <value>` anywhere in the text.
-- `name=value`, `name: value`, `name = 'value'` and `"name": "value"` where the name contains token, secret, password, passwd, passphrase, api key, credential or private key, in any case and with any prefix or suffix (`access_token`, `client_secret`, `x-api-key`, `apiKey`). A quoted value keeps its quotes; an unquoted value ends at whitespace, a comma, a semicolon, `&` or a closing bracket, so a query string keeps its other parameters.
+- `name=value`, `name: value`, `name = 'value'` and `"name": "value"` where the name ends with token, secret, password, passwd, passphrase, api key, credential or private key, in any case and with any prefix (`access_token`, `client_secret`, `x-api-key`, `apiKey`). Names that only contain the word, such as `max_tokens` or `token_count`, are left alone. A quoted value keeps its quotes; an unquoted value ends at whitespace, a comma, a semicolon, `&` or a closing bracket, so a query string keeps its other parameters.
 - `scheme://user:password@host`: the user and password are replaced.
 - Running it twice gives the same result.
 

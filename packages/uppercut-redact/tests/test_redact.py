@@ -100,6 +100,11 @@ def test_prose_that_only_mentions_the_words_is_left_alone():
     assert redact_text(text) == text
 
 
+def test_names_that_only_contain_a_credential_word_are_left_alone():
+    text = "max_tokens=100 token_count: 5 tokens=3 secret_name=prod password_hint=none"
+    assert redact_text(text) == text
+
+
 def test_empty_and_plain_text():
     assert redact_text("") == ""
     assert redact_text("plain") == "plain"

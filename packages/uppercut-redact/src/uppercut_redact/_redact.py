@@ -43,7 +43,7 @@ _BEARER = re.compile(r"(?i)\b(bearer\s+)[^\s,;]+")
 _KEY_VALUE = re.compile(
     rf"""(?ix)
     (?<!{_NAME_CHAR})
-    ({_NAME_CHAR}*(?:{_CREDENTIAL}){_NAME_CHAR}*)
+    ({_NAME_CHAR}*(?:{_CREDENTIAL}))
     (["']?\s*[:=]\s*)
     ("[^"]*"|'[^']*'|[^\s,;&"'}})]+)
     """
@@ -63,9 +63,9 @@ def redact_text(text: str, *, placeholder: str = PLACEHOLDER, extra: Iterable[An
     """Replace credential-shaped values in `text` with `placeholder`, keeping the label that names them.
 
     Handled: a password inside a URL, `Authorization` headers (the scheme stays: `Authorization: Bearer [REDACTED]`),
-    a bare `Bearer <value>`, and `name=value`, `name: value` and `"name": "value"` where the name contains
+    a bare `Bearer <value>`, and `name=value`, `name: value` and `"name": "value"` where the name ends with
     token, secret, password, passwd, passphrase, api key, credential or private key (so `access_token`,
-    `client_secret` and `x-api-key` are all caught). A quoted value keeps its quotes, and an unquoted one
+    `client_secret` and `x-api-key` are caught, while `max_tokens` and `token_count` are not). A quoted value keeps its quotes, and an unquoted one
     ends at whitespace, a comma, a semicolon, `&` or a closing bracket. Cookie headers are not text-scrubbed
     (they hold several values); `cookie` is a sensitive key name for `redact_mapping`.
 
