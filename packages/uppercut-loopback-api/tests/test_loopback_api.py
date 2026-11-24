@@ -11,7 +11,7 @@ import pytest
 import uppercut_loopback_api as api
 from uppercut_loopback_api import ApiError, LoopbackApp
 
-TAILNET = "example.ts.net"
+TAILNET = "tailnet.example"
 SECRET = "TEST-ONLY-SECRET-9f3a"
 
 
@@ -117,7 +117,7 @@ def test_unknown_host_is_refused(run):
 
 
 @pytest.mark.parametrize("host", [
-    "studio", "studio.example.ts.net", "STUDIO.example.ts.net:443", "studio.example.ts.net.",
+    "studio", "studio.tailnet.example", "STUDIO.tailnet.example:443", "studio.tailnet.example.",
     "127.0.0.1", "127.0.0.1:8890", "localhost", "localhost:8890",
 ])
 def test_tailnet_and_loopback_hosts_pass(run, host):
@@ -133,7 +133,7 @@ def test_missing_or_repeated_host_is_refused(run):
 def test_host_name_parsing():
     assert api.host_name("[::1]:8080") == "::1"
     assert api.host_name("[::1]") == "::1"
-    assert api.host_name("Studio.Example.ts.net.:443") == "studio.example.ts.net"
+    assert api.host_name("Studio.Tailnet.example.:443") == "studio.tailnet.example"
     assert api.host_name("::1") == "::1"
 
 
@@ -142,16 +142,15 @@ def test_only_loopback_names_without_configuration():
 
 
 def test_tailnet_hosts_builds_short_and_full_names():
-    assert api.tailnet_hosts("Example.TS.net.", "studio", "notes") == {
-        "studio", "studio.example.ts.net", "notes", "notes.example.ts.net"}
+    assert api.tailnet_hosts("Tailnet.Example.", "studio", "notes") == {
+        "studio", "studio.tailnet.example", "notes", "notes.tailnet.example"}
 
 
 def test_package_names_no_tailnet():
     source = Path(api.__file__).parent
     for path in source.glob("*.py"):
         text = path.read_text(encoding="utf-8")
-        assert set(re.findall(r"[\w.-]+\.ts\.net", text)) <= {"example.ts.net", "studio.example.ts.net",
-                                                               "notes.example.ts.net"}, path.name
+        assert not re.search(r"\.ts\.net", text, re.IGNORECASE), path.name
         assert "0.0.0.0" not in text, path.name
 
 

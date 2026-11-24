@@ -15,7 +15,7 @@ APP = LoopbackApp(
     short_name="NTS",                      # drawn on the icons in a 5x7 pixel font
     mount="/notes",                        # the path the proxy publishes the app under
     port=8890,
-    allowed_hosts=tailnet_hosts("example.ts.net", "studio"),
+    allowed_hosts=tailnet_hosts("tailnet.example", "studio"),
     index_html=Path("web/index.html"),
     log_path=Path("notes-remote.log"),
 )

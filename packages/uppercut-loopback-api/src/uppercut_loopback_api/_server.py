@@ -38,8 +38,8 @@ class ApiError(Exception):
 def tailnet_hosts(tailnet: str, *names: str) -> FrozenSet[str]:
     """Each name and `name.tailnet`, lower case: the Host headers a tailnet proxy sends.
 
-    `tailnet_hosts("example.ts.net", "studio", "notes")` accepts `studio`,
-    `studio.example.ts.net`, `notes` and `notes.example.ts.net`.
+    `tailnet_hosts("tailnet.example", "studio", "notes")` accepts `studio`,
+    `studio.tailnet.example`, `notes` and `notes.tailnet.example`.
     """
     tailnet = tailnet.strip(".").lower()
     hosts = set()
