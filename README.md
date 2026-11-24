@@ -12,6 +12,7 @@ Small, focused Python packages from Uppercut Labs, each published on its own on 
 | [`uppercut-rawvideo-encoder`](packages/uppercut-rawvideo-encoder) | Pipe RGB frames from Pillow renders to ffmpeg as H.264, check ffmpeg's exit code, plus a nearest-neighbour upscale and a cached font loader |
 | [`uppercut-sound-effect-synth`](packages/uppercut-sound-effect-synth) | Deterministic procedural sound effects: envelopes, filtered noise, sweeps, seeded variation and WAV output |
 | [`uppercut-subprocess-runner`](packages/uppercut-subprocess-runner) | Run a subprocess with a timeout, an output cap and cancellation, and kill its whole process tree |
+| [`uppercut-tts-worker`](packages/uppercut-tts-worker) | The JSON-lines protocol for a resident text-to-speech worker, a GPU lock that queues, a worker-side loop and a resumable job runner; no voice or model included |
 | [`uppercut-windows-window-capture`](packages/uppercut-windows-window-capture) | Capture one window on Windows with PrintWindow, as a Python module and a command line tool, to PNG or BMP |
 
 ## Working in this repo
