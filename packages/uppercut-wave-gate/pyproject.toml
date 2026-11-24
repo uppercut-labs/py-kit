@@ -1,0 +1,39 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "uppercut-wave-gate"
+version = "0.1.0"
+description = "Run one prompt over many pieces with a pluggable model runner, count only output that passes a gate command, and refuse to start unless the gate rejects a known-bad sample."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [{ name = "Uppercut Labs", email = "packages@uppercut-labs.com" }]
+keywords = ["llm", "batch", "gate", "validation", "resume", "manifest", "throughput"]
+dependencies = []
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Operating System :: MacOS",
+  "Operating System :: Microsoft :: Windows",
+  "Operating System :: POSIX",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Typing :: Typed",
+]
+
+[project.scripts]
+uppercut-wave-gate = "uppercut_wave_gate.cli:main"
+
+[project.urls]
+Source = "https://github.com/uppercut-labs/py-kit/tree/main/packages/uppercut-wave-gate"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/uppercut_wave_gate"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src", "tests", "README.md"]
