@@ -1,0 +1,39 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "uppercut-tts-worker"
+version = "0.1.0"
+description = "The JSON-lines protocol for a resident text-to-speech worker process, a GPU lock that queues, and a resumable job runner. Standard library only; no voice, sample or model is included."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [{ name = "Uppercut Labs", email = "packages@uppercut-labs.com" }]
+keywords = ["tts", "text-to-speech", "worker", "json-lines", "gpu", "lock", "narration"]
+dependencies = []
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Operating System :: MacOS",
+  "Operating System :: Microsoft :: Windows",
+  "Operating System :: POSIX",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Typing :: Typed",
+]
+
+[project.scripts]
+uppercut-tts-worker = "uppercut_tts_worker.job:main"
+
+[project.urls]
+Source = "https://github.com/uppercut-labs/py-kit/tree/main/packages/uppercut-tts-worker"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/uppercut_tts_worker"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src", "tests", "README.md"]
