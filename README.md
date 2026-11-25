@@ -10,6 +10,7 @@ Small, focused Python packages from Uppercut Labs, each published on its own on 
 | [`uppercut-presentmon-measure`](packages/uppercut-presentmon-measure) | Run startup, idle and workload scenarios against a desktop app, record frame timing with Intel PresentMon and summarize it to JSON |
 | [`uppercut-rawvideo-encoder`](packages/uppercut-rawvideo-encoder) | Pipe RGB frames from Pillow renders to ffmpeg as H.264, check ffmpeg's exit code, plus a nearest-neighbour upscale and a cached font loader |
 | [`uppercut-subprocess-runner`](packages/uppercut-subprocess-runner) | Run a subprocess with a timeout, an output cap and cancellation, and kill its whole process tree |
+| [`uppercut-wave-gate`](packages/uppercut-wave-gate) | Run one prompt over many pieces with a pluggable model runner, count only output that passes a gate, resume safely, and refuse to start unless the gate rejects a known-bad sample |
 | [`uppercut-windows-window-capture`](packages/uppercut-windows-window-capture) | Capture one window on Windows with PrintWindow, as a Python module and a command line tool, to PNG or BMP |
 
 Game development packages, `uppercut-pixel-art-sheets` and `uppercut-sound-effect-synth` among them, live in [game-kit](https://github.com/uppercut-labs/game-kit). They keep their PyPI names, so installing them is unchanged.
