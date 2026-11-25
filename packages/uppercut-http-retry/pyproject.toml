@@ -1,0 +1,36 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "uppercut-http-retry"
+version = "0.1.0"
+description = "Retry HTTP calls on 429 and 5xx with exponential backoff and Retry-After, and poll an asynchronous operation until it finishes. Standard library only."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [{ name = "Uppercut Labs", email = "packages@uppercut-labs.com" }]
+keywords = ["http", "retry", "backoff", "retry-after", "429", "polling", "urllib", "requests"]
+dependencies = []
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Operating System :: MacOS",
+  "Operating System :: Microsoft :: Windows",
+  "Operating System :: POSIX",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Typing :: Typed",
+]
+
+[project.urls]
+Source = "https://github.com/uppercut-labs/py-kit/tree/main/packages/uppercut-http-retry"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/uppercut_http_retry"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src", "tests", "README.md"]
