@@ -8,6 +8,7 @@ Small, focused Python packages from Uppercut Labs, each published on its own on 
 | [`uppercut-contact-sheet`](packages/uppercut-contact-sheet) | Build labelled contact-sheet grids from images and video frames with Pillow |
 | [`uppercut-grounded-answers`](packages/uppercut-grounded-answers) | Answer from retrieved evidence: decode a model's JSON reply, reject citations that were never supplied, raise typed provider failures that say whether to fail over, and try providers in order |
 | [`uppercut-ffmpeg-loudness`](packages/uppercut-ffmpeg-loudness) | Measure integrated loudness and true peak with ffmpeg, then apply gain or normalize to a target |
+| [`uppercut-json-records`](packages/uppercut-json-records) | Canonical JSON and SHA-256 hashes, stable prefixed IDs, JSON and JSONL batch loading with clear errors, and JSON Schema validators (jsonschema is an optional extra) |
 | [`uppercut-http-retry`](packages/uppercut-http-retry) | Retry HTTP calls on 429 and 5xx with exponential backoff and Retry-After, and poll an asynchronous operation until it finishes; works with urllib, requests and httpx |
 | [`uppercut-loopback-api`](packages/uppercut-loopback-api) | A small JSON API on 127.0.0.1 for a private app behind Tailscale Serve: Host allowlist, strict bodies, redacted request log, exclusive port bind, optional PWA client |
 | [`uppercut-pixel-art-sheets`](packages/uppercut-pixel-art-sheets) | Pillow helpers for indexed pixel-art sheets: palettes, pattern fills, a bitmap font and sheet packing |
