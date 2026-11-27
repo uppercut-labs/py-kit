@@ -47,4 +47,4 @@ __all__ = [
     "status_failure",
     "timeout_failure",
 ]
-__version__ = "0.1.0"
+__version__ = "1.0.0"

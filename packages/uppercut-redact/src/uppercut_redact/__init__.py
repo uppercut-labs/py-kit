@@ -15,4 +15,4 @@ __all__ = [
     "redact_mapping",
     "redact_text",
 ]
-__version__ = "0.1.0"
+__version__ = "1.0.0"

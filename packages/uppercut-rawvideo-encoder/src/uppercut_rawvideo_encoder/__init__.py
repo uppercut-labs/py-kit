@@ -11,4 +11,4 @@ __all__ = [
     "format_fps",
     "nearest",
 ]
-__version__ = "0.1.1"
+__version__ = "1.0.0"

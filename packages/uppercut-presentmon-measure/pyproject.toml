@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "uppercut-presentmon-measure"
-version = "0.2.0"
+version = "1.0.0"
 description = "Run startup, idle and workload scenarios against a desktop app, record frame timing with Intel PresentMon and summarize it to JSON."
 readme = "README.md"
 requires-python = ">=3.10"

@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "uppercut-ffmpeg-loudness"
-version = "0.1.0"
+version = "1.0.0"
 description = "Measure integrated loudness and true peak with ffmpeg, then apply gain or normalize to a target."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -13,7 +13,7 @@ authors = [{ name = "Uppercut Labs", email = "packages@uppercut-labs.com" }]
 dependencies = []
 keywords = ["ffmpeg", "loudness", "lufs", "ebur128", "loudnorm", "true-peak"]
 classifiers = [
-  "Development Status :: 4 - Beta",
+  "Development Status :: 5 - Production/Stable",
   "Intended Audience :: Developers",
   "Programming Language :: Python :: 3",
   "Topic :: Multimedia :: Sound/Audio",

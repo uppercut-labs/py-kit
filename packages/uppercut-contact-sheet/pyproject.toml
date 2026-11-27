@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "uppercut-contact-sheet"
-version = "0.1.0"
+version = "1.0.0"
 description = "Build labelled contact-sheet grids from images and video frames with Pillow."
 readme = "README.md"
 requires-python = ">=3.10"

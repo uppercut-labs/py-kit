@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "uppercut-redact"
-version = "0.1.0"
+version = "1.0.0"
 description = "Scrub credential-shaped text (bearer tokens, key=value secrets, URL passwords) and mask or drop sensitive keys in logs, errors and telemetry. Standard library only."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -13,7 +13,7 @@ authors = [{ name = "Uppercut Labs", email = "packages@uppercut-labs.com" }]
 keywords = ["redact", "secrets", "logging", "scrub", "bearer", "token", "telemetry", "privacy"]
 dependencies = []
 classifiers = [
-  "Development Status :: 4 - Beta",
+  "Development Status :: 5 - Production/Stable",
   "Intended Audience :: Developers",
   "Operating System :: MacOS",
   "Operating System :: Microsoft :: Windows",
