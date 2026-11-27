@@ -98,8 +98,9 @@ class GpuLock:
         self.held = False
         try:
             with open(self.path, encoding="utf-8") as fh:
-                if fh.read().strip() == str(os.getpid()):
-                    os.remove(self.path)
+                owner = fh.read().strip()
+            if owner == str(os.getpid()):  # removed after the file is closed: Windows will not delete an open file
+                os.remove(self.path)
         except OSError:
             pass
         atexit.unregister(self.release)
