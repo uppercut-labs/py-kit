@@ -1,6 +1,6 @@
 # py-kit
 
-Small, focused Python packages from Uppercut Labs, each published on its own on PyPI with the `uppercut-` prefix.
+Small, focused Python packages from Uppercut Labs. Every package is at version 1.0.0 and published on its own on PyPI with the `uppercut-` prefix.
 
 | Package | What it does |
 | --- | --- |

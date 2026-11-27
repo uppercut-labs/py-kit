@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "uppercut-loopback-api"
-version = "0.1.0"
+version = "1.0.0"
 description = "A small JSON API on 127.0.0.1 for a private app behind Tailscale Serve or another reverse proxy: Host allowlist, strict bodies, redacted logs, exclusive port bind."
 readme = "README.md"
 requires-python = ">=3.9"
@@ -13,7 +13,7 @@ authors = [{ name = "Uppercut Labs", email = "packages@uppercut-labs.com" }]
 keywords = ["http", "loopback", "tailscale", "reverse-proxy", "json-api", "pwa", "dns-rebinding"]
 dependencies = []
 classifiers = [
-  "Development Status :: 4 - Beta",
+  "Development Status :: 5 - Production/Stable",
   "Intended Audience :: Developers",
   "Operating System :: MacOS",
   "Operating System :: Microsoft :: Windows",

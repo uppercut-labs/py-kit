@@ -204,6 +204,29 @@ def test_raise_tree_priority_does_nothing_off_windows():
         assert raise_tree_priority(os.getpid()) == []
 
 
+@pytest.mark.skipif(os.name != "nt", reason="the Win32 calls")
+def test_windows_process_alive_and_priority_on_a_live_child():
+    import ctypes
+
+    child = subprocess.Popen([PY, "-c", "import time; time.sleep(30)"])
+    try:
+        assert process_alive(child.pid)
+        assert child.pid in raise_tree_priority(child.pid, attempts=1)
+        kernel32 = ctypes.windll.kernel32
+        kernel32.OpenProcess.restype = ctypes.c_void_p
+        kernel32.GetPriorityClass.argtypes = [ctypes.c_void_p]
+        kernel32.CloseHandle.argtypes = [ctypes.c_void_p]
+        handle = kernel32.OpenProcess(0x1000, False, child.pid)  # PROCESS_QUERY_LIMITED_INFORMATION
+        try:
+            assert kernel32.GetPriorityClass(handle) == 0x8000  # ABOVE_NORMAL_PRIORITY_CLASS
+        finally:
+            kernel32.CloseHandle(handle)
+    finally:
+        child.kill()
+        child.wait()
+    assert not process_alive(child.pid)
+
+
 # worker process ----------------------------------------------------------------------------------------
 
 def test_worker_round_trip(tmp_path):

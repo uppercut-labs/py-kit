@@ -39,4 +39,4 @@ __all__ = [
     "plan_gain",
     "volume_filter",
 ]
-__version__ = "0.1.0"
+__version__ = "1.0.0"

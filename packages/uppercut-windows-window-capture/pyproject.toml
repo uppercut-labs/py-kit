@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "uppercut-windows-window-capture"
-version = "0.1.0"
+version = "1.0.0"
 description = "Capture one window on Windows with PrintWindow, as a Python module and a command line tool, to PNG or BMP."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -13,7 +13,7 @@ authors = [{ name = "Uppercut Labs", email = "packages@uppercut-labs.com" }]
 keywords = ["windows", "screenshot", "printwindow", "window-capture", "ctypes"]
 dependencies = []
 classifiers = [
-  "Development Status :: 4 - Beta",
+  "Development Status :: 5 - Production/Stable",
   "Intended Audience :: Developers",
   "Operating System :: Microsoft :: Windows",
   "Programming Language :: Python :: 3",

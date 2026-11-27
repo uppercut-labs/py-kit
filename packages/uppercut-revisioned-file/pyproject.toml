@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "uppercut-revisioned-file"
-version = "0.1.0"
+version = "1.0.0"
 description = "Atomic file writes (fsynced temporary file, os.replace, directory fsync) and a whole-file store with opaque revisions, 409-style conflicts and fsynced backups."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -13,7 +13,7 @@ authors = [{ name = "Uppercut Labs", email = "packages@uppercut-labs.com" }]
 keywords = ["atomic", "fsync", "os.replace", "json", "revision", "optimistic-concurrency", "backup"]
 dependencies = []
 classifiers = [
-  "Development Status :: 4 - Beta",
+  "Development Status :: 5 - Production/Stable",
   "Intended Audience :: Developers",
   "Operating System :: MacOS",
   "Operating System :: Microsoft :: Windows",

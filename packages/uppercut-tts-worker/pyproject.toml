@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "uppercut-tts-worker"
-version = "0.1.0"
+version = "1.0.0"
 description = "The JSON-lines protocol for a resident text-to-speech worker process, a GPU lock that queues, and a resumable job runner. Standard library only; no voice, sample or model is included."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -13,7 +13,7 @@ authors = [{ name = "Uppercut Labs", email = "packages@uppercut-labs.com" }]
 keywords = ["tts", "text-to-speech", "worker", "json-lines", "gpu", "lock", "narration"]
 dependencies = []
 classifiers = [
-  "Development Status :: 4 - Beta",
+  "Development Status :: 5 - Production/Stable",
   "Intended Audience :: Developers",
   "Operating System :: MacOS",
   "Operating System :: Microsoft :: Windows",

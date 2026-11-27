@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "uppercut-grounded-answers"
-version = "0.1.0"
+version = "1.0.0"
 description = "Answer from retrieved evidence with typed provider failures, failover between providers and citation validation. Endpoints and model names are configuration."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -13,7 +13,7 @@ authors = [{ name = "Uppercut Labs", email = "packages@uppercut-labs.com" }]
 keywords = ["rag", "citations", "grounding", "failover", "llm", "retrieval", "ollama", "openai-compatible"]
 dependencies = ["httpx>=0.27,<1"]
 classifiers = [
-  "Development Status :: 4 - Beta",
+  "Development Status :: 5 - Production/Stable",
   "Intended Audience :: Developers",
   "Operating System :: MacOS",
   "Operating System :: Microsoft :: Windows",

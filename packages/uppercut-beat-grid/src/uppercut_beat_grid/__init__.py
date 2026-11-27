@@ -31,4 +31,4 @@ __all__ = [
     "write_bed",
     "write_wav24",
 ]
-__version__ = "0.1.0"
+__version__ = "1.0.0"
