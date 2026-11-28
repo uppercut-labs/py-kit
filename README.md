@@ -15,6 +15,8 @@ Small, focused Python packages from Uppercut Labs. Every package is at version 1
 | [`uppercut-presentmon-measure`](packages/uppercut-presentmon-measure) | Run startup, idle and workload scenarios against a desktop app, record frame timing with Intel PresentMon and summarize it to JSON |
 | [`uppercut-rawvideo-encoder`](packages/uppercut-rawvideo-encoder) | Pipe RGB frames from Pillow renders to ffmpeg as H.264, check ffmpeg's exit code, plus a nearest-neighbour upscale and a cached font loader |
 | [`uppercut-redact`](packages/uppercut-redact) | Scrub bearer tokens, key=value secrets and URL passwords from text, and mask or drop sensitive keys in dictionaries before they reach logs, errors or telemetry |
+| [`uppercut-revisioned-file`](packages/uppercut-revisioned-file) | Atomic file writes, and a whole-file store with opaque revisions, conflict errors and fsynced backups |
+| [`uppercut-scratch-runs`](packages/uppercut-scratch-runs) | Disposable run directories with an ownership marker: allocate one, run a command in it, and remove exactly that directory without following links or Windows junctions |
 | [`uppercut-sound-effect-synth`](packages/uppercut-sound-effect-synth) | Deterministic procedural sound effects: envelopes, filtered noise, sweeps, seeded variation and WAV output |
 | [`uppercut-subprocess-runner`](packages/uppercut-subprocess-runner) | Run a subprocess with a timeout, an output cap and cancellation, and kill its whole process tree |
 | [`uppercut-tts-worker`](packages/uppercut-tts-worker) | The JSON-lines protocol for a resident text-to-speech worker, a GPU lock that queues, a worker-side loop and a resumable job runner; no voice or model included |
