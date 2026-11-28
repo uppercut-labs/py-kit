@@ -1,0 +1,40 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "uppercut-scratch-runs"
+version = "1.0.0"
+description = "Disposable run directories with an ownership marker: allocate one, run a command in it, and remove exactly that directory without following links or Windows junctions."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [{ name = "Uppercut Labs", email = "packages@uppercut-labs.com" }]
+keywords = ["scratch", "temporary-directory", "tmpdir", "cleanup", "rmtree", "symlink", "junction", "build"]
+dependencies = ['tomli>=1.1.0; python_version < "3.11"']
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Intended Audience :: Developers",
+  "Operating System :: MacOS",
+  "Operating System :: Microsoft :: Windows",
+  "Operating System :: POSIX",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Software Development :: Build Tools",
+  "Typing :: Typed",
+]
+
+[project.scripts]
+uppercut-scratch-runs = "uppercut_scratch_runs.cli:entry"
+
+[project.urls]
+Source = "https://github.com/uppercut-labs/py-kit/tree/main/packages/uppercut-scratch-runs"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/uppercut_scratch_runs"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src", "tests", "README.md"]
