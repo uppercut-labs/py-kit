@@ -18,7 +18,7 @@ project = "my-game"          # the marker defaults to .my-game-run
 variable = "MY_GAME_SCRATCH" # run sets this as well as TMPDIR, TEMP and TMP
 
 [tool.uppercut-scratch-runs.roots]
-windows = ["C:/scratch/my-game", "D:/bulk/my-game"]
+windows = ["~/scratch/my-game", "~/bulk/my-game"]
 wsl = ["/scratch/my-game"]
 default = ["~/scratch/my-game"]
 ```

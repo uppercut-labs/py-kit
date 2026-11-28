@@ -42,8 +42,8 @@ def test_platform_keys_end_with_default():
 
 
 def test_from_mapping_derives_the_marker_from_the_project():
-    config = ScratchConfig.from_mapping({"project": "floodgun", "roots": {"linux": "/tmp/x"}})
-    assert config.marker == ".floodgun-run"
+    config = ScratchConfig.from_mapping({"project": "my-game", "roots": {"linux": "/tmp/x"}})
+    assert config.marker == ".my-game-run"
     assert config.variable == "SCRATCH_RUN"
     assert config.platform_roots(["linux"]) == (Path("/tmp/x"),)
 
